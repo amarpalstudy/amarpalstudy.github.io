@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class 12</title>
+    <title>MultiView - Video & AI Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -150,6 +150,20 @@
             width: 100%;
             height: 100%;
             border: none;
+            pointer-events: auto;
+        }
+        
+        /* Block YouTube logo and watch button from being clickable */
+        .video-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 80px;
+            background: transparent;
+            pointer-events: none;
+            z-index: 1;
         }
         
         .video-controls {
@@ -601,7 +615,11 @@
 <body>
     <div class="bg-gradient"></div>
     
-    <div class="container">        
+    <div class="container">
+        <header>
+            <div class="logo">◉ MultiView</div>
+        </header>
+        
         <div class="main-content" id="mainContent">
             <div class="video-grid" id="videoGrid">
                 <div class="empty-state">
@@ -668,8 +686,7 @@
         // ============================================
         // ADD YOUR YOUTUBE URLS HERE
         // ============================================
-        const YOUTUBE_URLS = [
-          'https://www.youtube.com/watch?v=2gumHdFXums&list=PLDFtjdbvBWcYSFSWAmmApY25zg5A1Q7Df&index=10',
+         const YOUTUBE_URLS = [
             'https://www.youtube.com/watch?v=6GaLVcWIVzw&list=PLDFtjdbvBWcYSFSWAmmApY25zg5A1Q7Df&index=11',
             'https://www.youtube.com/watch?v=03PgdzPn-XE&list=PLDFtjdbvBWcYSFSWAmmApY25zg5A1Q7Df&index=12',
             'https://www.youtube.com/watch?v=uf2UvFqUoXE&list=PLDFtjdbvBWcYSFSWAmmApY25zg5A1Q7Df&index=13',
@@ -713,8 +730,26 @@
                             temperature: 0.4,  // Lower temperature for more focused, accurate educational responses
                             topK: 40,          // Increased for better vocabulary and explanation diversity
                             topP: 0.95,        // High value for comprehensive, detailed answers
-                            maxOutputTokens: 81920, // Maximum allowed for most Gemini models
+                            maxOutputTokens: 8192, // Maximum allowed for most Gemini models
                         },
+                        safetySettings: [
+                            {
+                                category: "HARM_CATEGORY_HARASSMENT",
+                                threshold: "BLOCK_ONLY_HIGH"  // Less restrictive for educational discussions
+                            },
+                            {
+                                category: "HARM_CATEGORY_HATE_SPEECH",
+                                threshold: "BLOCK_ONLY_HIGH"
+                            },
+                            {
+                                category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                threshold: "BLOCK_MEDIUM_AND_ABOVE"  // Keep this strict
+                            },
+                            {
+                                category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                threshold: "BLOCK_ONLY_HIGH"  // Allow chemistry, physics experiments discussion
+                            }
+                        ],
                         systemInstruction: {
                             parts: [{
                                 text: "You are a knowledgeable and patient study assistant. Your role is to:\n\n" +
@@ -731,6 +766,7 @@
                         }
                     })
                 });
+                
                 if (!response.ok) {
                     const error = await response.json();
                     throw new Error(error.error?.message || 'Failed to get response from Gemini');
@@ -912,7 +948,16 @@
                     videos.push({
                         id: videoId,
                         url: url,
-                        embedUrl: `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`
+                        // Enhanced embed URL to prevent YouTube redirects
+                        embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?` + 
+                                  `rel=0&` +              // Don't show related videos
+                                  `modestbranding=1&` +   // Minimal YouTube branding
+                                  `fs=1&` +               // Allow fullscreen
+                                  `iv_load_policy=3&` +   // Hide video annotations
+                                  `controls=1&` +         // Show player controls
+                                  `disablekb=0&` +        // Keep keyboard controls
+                                  `playsinline=1&` +      // Play inline on mobile
+                                  `widget_referrer=${encodeURIComponent(window.location.href)}` // Set referrer
                     });
                     videoCount++;
                 }
@@ -947,7 +992,8 @@
                     <div class="video-wrapper">
                         <iframe 
                             src="${video.embedUrl}" 
-                            frameborder="0" 
+                            frameborder="0"
+                            sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen
                         ></iframe>
@@ -962,6 +1008,83 @@
         
         // Load predefined videos on page load
         window.addEventListener('DOMContentLoaded', loadPredefinedVideos);
+        
+        // ============================================
+        // BLOCK ALL EXTERNAL REDIRECTS
+        // ============================================
+        
+        // Prevent new window/tab openings
+        window.open = function() {
+            console.log('Blocked: External window opening attempt');
+            return null;
+        };
+        
+        // Intercept all clicks and block external navigation
+        document.addEventListener('click', function(e) {
+            let target = e.target;
+            
+            // Traverse up to find if clicked element is or contains a link
+            while (target && target !== document) {
+                if (target.tagName === 'A' || target.onclick) {
+                    const href = target.href || target.getAttribute('href');
+                    
+                    // Block external links
+                    if (href && (href.includes('youtube.com') || href.includes('youtu.be') || href.startsWith('http'))) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Blocked: External navigation attempt to', href);
+                        
+                        // Optional: Show notification to user
+                        addErrorMessage('External links are disabled to keep you focused on studying! 📚');
+                        setTimeout(() => {
+                            const errors = document.querySelectorAll('.error-message');
+                            if (errors.length > 3) errors[0].remove();
+                        }, 3000);
+                        
+                        return false;
+                    }
+                }
+                target = target.parentNode;
+            }
+        }, true); // Use capture phase
+        
+        // Block beforeunload navigation attempts
+        let allowedNavigation = false;
+        window.addEventListener('beforeunload', function(e) {
+            if (!allowedNavigation) {
+                // This won't block iframe navigation but will warn on page navigation
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+        
+        // Override location changes
+        const originalLocationSetter = Object.getOwnPropertyDescriptor(window, 'location').set;
+        Object.defineProperty(window, 'location', {
+            set: function(value) {
+                console.log('Blocked: Location change attempt to', value);
+                // Don't allow the change
+                return;
+            },
+            get: function() {
+                return window.location;
+            }
+        });
+        
+        // Block iframe navigation attempts
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                try {
+                    // Try to access iframe content (may be blocked by CORS)
+                    iframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-presentation';
+                } catch (e) {
+                    console.log('Cannot modify iframe sandbox due to CORS');
+                }
+            });
+        });
+        
+        console.log('🔒 External redirect protection enabled');
     </script>
 </body>
 </html>
