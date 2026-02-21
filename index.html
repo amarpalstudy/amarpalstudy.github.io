@@ -409,6 +409,37 @@
                 font-size: 0.7rem;
             }
         }
+        
+        /* Minimalist Fullscreen */
+        .pdf-panel:fullscreen .panel-title,
+        .pdf-panel:fullscreen .pdf-buttons {
+            display: none;
+        }
+        
+        .pdf-panel:fullscreen .panel-header {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: rgba(30, 39, 56, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px;
+            width: auto;
+            backdrop-filter: blur(8px);
+            opacity: 0.3;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .pdf-panel:fullscreen .panel-header:hover {
+            opacity: 1;
+            background: rgba(30, 39, 56, 0.8);
+        }
+        
+        .pdf-panel:fullscreen .pdf-viewer {
+            height: 100vh;
+        }
     </style>
 </head>
 <body>
