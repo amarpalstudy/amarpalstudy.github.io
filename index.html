@@ -1,691 +1,381 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Class 12</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --bg-primary: #0a0e17;
-            --bg-secondary: #151b2b;
-            --bg-tertiary: #1e2738;
-            --accent-primary: #00ff88;
-            --accent-secondary: #00d4ff;
-            --accent-tertiary: #ff00ff;
-            --text-primary: #ffffff;
-            --text-secondary: #8b93a8;
-            --border-color: #2a3447;
-            --shadow-glow: rgba(0, 255, 136, 0.2);
+      :root {
+        --bg-primary: #0a0e17;
+        --bg-secondary: #151b2b;
+        --bg-tertiary: #1e2738;
+        --accent-primary: #00ff88;
+        --accent-secondary: #00d4ff;
+        --accent-tertiary: #ff00ff;
+        --text-primary: #ffffff;
+        --text-secondary: #8b93a8;
+        --border-color: #2a3447;
+        --shadow-glow: rgba(0, 255, 136, 0.2);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      /* Animated background */
+      .bg-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+          radial-gradient(
+            circle at 20% 50%,
+            rgba(0, 255, 136, 0.05) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(0, 212, 255, 0.05) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 20%,
+            rgba(255, 0, 255, 0.03) 0%,
+            transparent 50%
+          );
+        z-index: 0;
+        animation: bgPulse 15s ease-in-out infinite;
+      }
+
+      @keyframes bgPulse {
+        0%,
+        100% {
+          opacity: 0.3;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        50% {
+          opacity: 0.6;
         }
-        
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow: hidden;
-            height: 100vh;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header */
+      header {
+        padding: 1.5rem 2rem;
+        background: rgba(21, 27, 43, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .logo {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.02em;
+      }
+
+      /* Main content area */
+      .main-content {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* When chat is fullscreen, hide videos */
+
+      /* Video grid */
+      .video-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+        padding: 0.5rem;
+      }
+
+      .video-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        animation: slideIn 0.4s ease-out;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .video-card:hover {
+        border-color: var(--accent-primary);
+        box-shadow: 0 8px 30px rgba(0, 255, 136, 0.15);
+        transform: translateY(-4px);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-        
-        /* Animated background */
-        .bg-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(255, 0, 255, 0.03) 0%, transparent 50%);
-            z-index: 0;
-            animation: bgPulse 15s ease-in-out infinite;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        
-        @keyframes bgPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
-        }
-        
-        .container {
-            position: relative;
-            z-index: 1;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Header */
-        header {
-            padding: 1.5rem 2rem;
-            background: rgba(21, 27, 43, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.02em;
-        }
-        
-        /* Main content area */
+      }
+
+      .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 */
+        height: 0;
+      }
+
+      .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        pointer-events: auto;
+      }
+
+      /* Block YouTube logo and watch button from being clickable */
+      .video-wrapper::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 120px;
+        height: 80px;
+        background: transparent;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .video-controls {
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(30, 39, 56, 0.5);
+      }
+
+      .video-title {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-family: "JetBrains Mono", monospace;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .remove-btn {
+        padding: 0.5rem 1rem;
+        background: rgba(255, 68, 68, 0.1);
+        border: 1px solid rgba(255, 68, 68, 0.3);
+        border-radius: 6px;
+        color: #ff4444;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+      }
+
+      .remove-btn:hover {
+        background: rgba(255, 68, 68, 0.2);
+        border-color: #ff4444;
+      }
+
+      /* Scrollbar styling */
+      .video-grid::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .video-grid::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 4px;
+      }
+
+      .video-grid::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+        transition: background 0.3s ease;
+      }
+
+      .video-grid::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-primary);
+      }
+
+      /* Empty state */
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        gap: 1rem;
+        color: var(--text-secondary);
+      }
+
+      .empty-state-icon {
+        font-size: 4rem;
+        opacity: 0.3;
+      }
+
+      .empty-state-text {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.1rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 1200px) {
         .main-content {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 60% 40%;
-            gap: 1rem;
-            padding: 1rem;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          grid-template-columns: 1fr;
         }
-        
-        /* When chat is fullscreen, hide videos */
-        .main-content.chat-fullscreen {
-            grid-template-columns: 1fr;
-            padding: 0;
-        }
-        
-        .main-content.chat-fullscreen .video-grid {
-            display: none;
-        }
-        
-        /* Video grid */
+      }
+
+      @media (max-width: 768px) {
         .video-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            overflow-y: auto;
-            padding: 0.5rem;
+          grid-template-columns: 1fr !important;
         }
-        
-        .video-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            animation: slideIn 0.4s ease-out;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-        
-        .video-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 8px 30px rgba(0, 255, 136, 0.15);
-            transform: translateY(-4px);
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-        }
-        
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            pointer-events: auto;
-        }
-        
-        /* Block YouTube logo and watch button from being clickable */
-        .video-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 120px;
-            height: 80px;
-            background: transparent;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .video-controls {
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(30, 39, 56, 0.5);
-        }
-        
-        .video-title {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .remove-btn {
-            padding: 0.5rem 1rem;
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            border-radius: 6px;
-            color: #ff4444;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-        }
-        
-        .remove-btn:hover {
-            background: rgba(255, 68, 68, 0.2);
-            border-color: #ff4444;
-        }
-        
-        /* PDF Viewer panel */
-        .pdf-panel {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .panel-header {
-            padding: 1rem;
-            background: rgba(30, 39, 56, 0.8);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-shrink: 0;
-        }
-        
-        .panel-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--accent-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent-primary);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        .toggle-fullscreen {
-            padding: 0.5rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-        }
-        
-        .toggle-fullscreen:hover {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            background: rgba(0, 255, 136, 0.1);
-        }
-        
-        .toggle-fullscreen svg {
-            width: 18px;
-            height: 18px;
-        }
-        
-        /* PDF buttons bar */
-        .pdf-buttons {
-            display: flex;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            background: rgba(30, 39, 56, 0.5);
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-            flex-wrap: wrap;
-        }
-        
-        .pdf-btn {
-            flex: 1;
-            min-width: 60px;
-            padding: 0.6rem 0.75rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            white-space: nowrap;
-        }
-        
-        .pdf-btn:hover {
-            border-color: var(--accent-secondary);
-            color: var(--accent-secondary);
-            background: rgba(0, 212, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.15);
-        }
-        
-        .pdf-btn.active {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.15));
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            box-shadow: 0 0 12px rgba(0, 255, 136, 0.2);
-        }
-        
-        /* PDF viewer area */
-        .pdf-viewer {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .pdf-viewer iframe {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background: var(--bg-primary);
-        }
-        
-        .error-message {
-            padding: 1rem;
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            border-radius: 8px;
-            color: #ff4444;
-            font-size: 0.9rem;
-            margin: 1rem;
-        }
-        
-        /* Scrollbar styling */
-        .video-grid::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .video-grid::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-            border-radius: 4px;
-        }
-        
-        .video-grid::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-            transition: background 0.3s ease;
-        }
-        
-        .video-grid::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-primary);
-        }
-        
-        /* Empty state */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            gap: 1rem;
-            color: var(--text-secondary);
-        }
-        
-        .empty-state-icon {
-            font-size: 4rem;
-            opacity: 0.3;
-        }
-        
-        .empty-state-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.1rem;
-        }
-        
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .pdf-panel {
-                min-height: 400px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .video-grid {
-                grid-template-columns: 1fr !important;
-            }
-            
-            .pdf-buttons {
-                gap: 0.35rem;
-            }
-            
-            .pdf-btn {
-                padding: 0.5rem;
-                font-size: 0.7rem;
-            }
-        }
-        
-        /* Minimalist Fullscreen */
-        .pdf-panel:fullscreen .panel-title,
-        .pdf-panel:fullscreen .pdf-buttons {
-            display: none;
-        }
-        
-        .pdf-panel:fullscreen .panel-header {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 1000;
-            background: rgba(30, 39, 56, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 6px;
-            width: auto;
-            backdrop-filter: blur(8px);
-            opacity: 0.3;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .pdf-panel:fullscreen .panel-header:hover {
-            opacity: 1;
-            background: rgba(30, 39, 56, 0.8);
-        }
-        
-        .pdf-panel:fullscreen .pdf-viewer {
-            height: 100vh;
-        }
-
-        /* ============================================
-           PDF CUSTOM SELECTOR STYLES
-           ============================================ */
-        .pdf-selector-container {
-            flex: 0 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: var(--bg-tertiary);
-            padding: 0.45rem 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            min-width: 240px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .pdf-selector-container:hover {
-            border-color: var(--accent-secondary);
-            background: rgba(30, 39, 56, 1);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.1);
-        }
-
-        .pdf-selector-text {
-            flex: 1;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .pdf-selector-icon {
-            color: var(--accent-secondary);
-            display: flex;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-
-        .pdf-selector-container:hover .pdf-selector-icon {
-            transform: translateY(2px);
-        }
-
-        /* Hidden native select that covers the container */
-        .pdf-native-select {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-            -webkit-appearance: none;
-            appearance: none;
-            z-index: 2;
-        }
-
-        .pdf-native-select option {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            padding: 12px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Fullscreen adjustment */
-        .pdf-panel:fullscreen .pdf-selector-container {
-            display: none;
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="bg-gradient"></div>
-    
+
     <div class="container">
-        <div class="main-content" id="mainContent">
-            <div class="video-grid" id="videoGrid">
-                <div class="empty-state">
-                    <div class="empty-state-icon">📺</div>
-                    <div class="empty-state-text">No videos configured</div>
-                </div>
-            </div>
-            
-            <div class="pdf-panel" id="pdfPanel">
-                <div class="panel-header">
-                    <div class="pdf-selector-container">
-                        <div class="pdf-selector-text" id="currentPdfLabel">
-                            <span style="opacity: 0.6">📄</span> Lec 101 - Solutions
-                        </div>
-                        <div class="pdf-selector-icon">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </div>
-                        <select class="pdf-native-select" id="pdfSelector" onchange="updatePDF(this)">
-                            <optgroup label="Core Lectures">
-                                <option value="lech101.pdf">Lec 101 - Solutions</option>
-                                <option value="lech102.pdf">Lec 102 - Haloalkanes</option>
-                                <option value="lech103.pdf">Lec 103 - Alcohols</option>
-                                <option value="lech104.pdf">Lec 104 - Aldehydes</option>
-                                <option value="lech105.pdf">Lec 105 - Amines</option>
-                            </optgroup>
-                            <optgroup label="Special Chapters">
-                                <option value="Coordination Compound .pdf">Coordination Comp.</option>
-                                <option value="D And F Block.pdf">D & F Block</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                    
-                    <button class="toggle-fullscreen" id="toggleFullscreen" onclick="toggleFullscreen()" title="Toggle Fullscreen">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="pdf-viewer">
-                    <iframe id="pdfFrame" src="lech101.pdf"></iframe>
-                </div>
-            </div>
+      <div class="main-content" id="mainContent">
+        <div class="video-grid" id="videoGrid">
+          <div class="empty-state">
+            <div class="empty-state-icon">📺</div>
+            <div class="empty-state-text">No videos configured</div>
+          </div>
         </div>
+      </div>
     </div>
-    
+
     <script>
-        // ============================================
-        // ADD YOUR YOUTUBE URLS HERE
-        // ============================================
-         const YOUTUBE_URLS = [
-            'https://www.youtube.com/watch?v=pafeee3O6u8&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=2',
-            'https://www.youtube.com/watch?v=a8YasMSWFvc&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=3',
-            'https://www.youtube.com/watch?v=4Aml6yd4tDY&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=4',
-            'https://www.youtube.com/watch?v=cIxHoVCUN1M&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=5',
-            'https://www.youtube.com/watch?v=uVEOu40lYEY&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=6',
-            'https://www.youtube.com/watch?v=dBglfhVX6kI&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=7',
-            'https://www.youtube.com/watch?v=-tcuZsZqXZk&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=8',
-            'https://www.youtube.com/watch?v=EEudvNSWzXE&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=9',
-            'https://www.youtube.com/watch?v=B5Rq-af5R14&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=10',
-            'https://www.youtube.com/watch?v=7ggiHx1dEok&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=11',
-            'https://www.youtube.com/watch?v=98ngGuFd9Vg&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=12',
-            'https://www.youtube.com/watch?v=_YJr2t_1NTU&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=13'
-];
-        // ============================================
-        
-        let videoCount = 0;
-        const videos = [];
-        
-        // ============================================
-        // PDF VIEWER FUNCTIONS
-        // ============================================
-        
-        function updatePDF(select) {
-            const filename = select.value;
-            const label = select.options[select.selectedIndex].text;
-            document.getElementById('currentPdfLabel').textContent = label;
-            
-            const pdfFrame = document.getElementById('pdfFrame');
-            pdfFrame.src = filename;
+      // ============================================
+      // ADD YOUR YOUTUBE URLS HERE
+      // ============================================
+      const YOUTUBE_URLS = [
+        "https://www.youtube.com/watch?v=pafeee3O6u8&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=2",
+        "https://www.youtube.com/watch?v=a8YasMSWFvc&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=3",
+        "https://www.youtube.com/watch?v=4Aml6yd4tDY&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=4",
+        "https://www.youtube.com/watch?v=cIxHoVCUN1M&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=5",
+        "https://www.youtube.com/watch?v=uVEOu40lYEY&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=6",
+        "https://www.youtube.com/watch?v=dBglfhVX6kI&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=7",
+        "https://www.youtube.com/watch?v=-tcuZsZqXZk&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=8",
+        "https://www.youtube.com/watch?v=EEudvNSWzXE&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=9",
+        "https://www.youtube.com/watch?v=B5Rq-af5R14&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=10",
+        "https://www.youtube.com/watch?v=7ggiHx1dEok&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=11",
+        "https://www.youtube.com/watch?v=98ngGuFd9Vg&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=12",
+        "https://www.youtube.com/watch?v=_YJr2t_1NTU&list=PLDFtjdbvBWcYl4qyXjD83PU3IRauDbChW&index=13",
+      ];
+      // ============================================
+
+      let videoCount = 0;
+      const videos = [];
+
+      function extractVideoId(url) {
+        // Handle different YouTube URL formats
+        const patterns = [
+          /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+          /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+        ];
+
+        for (const pattern of patterns) {
+          const match = url.match(pattern);
+          if (match) return match[1];
         }
-        
-        // Original loadPDF removed in favor of updatePDF (dropdown-based)
-        function loadPDF(filename, btnIndex) {
-            const pdfFrame = document.getElementById('pdfFrame');
-            pdfFrame.src = filename;
-        }
-        
-        // Toggle fullscreen using browser Fullscreen API
-        function toggleFullscreen() {
-            const panel = document.getElementById('pdfPanel');
-            
-            if (!document.fullscreenElement) {
-                panel.requestFullscreen().catch(err => {
-                    console.log('Fullscreen error:', err);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-        
-        function extractVideoId(url) {
-            // Handle different YouTube URL formats
-            const patterns = [
-                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-                /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
-            ];
-            
-            for (const pattern of patterns) {
-                const match = url.match(pattern);
-                if (match) return match[1];
-            }
-            
-            return null;
-        }
-        
-        function loadPredefinedVideos() {
-            YOUTUBE_URLS.forEach(url => {
-                const videoId = extractVideoId(url);
-                if (videoId && !videos.some(v => v.id === videoId)) {
-                    videos.push({
-                        id: videoId,
-                        url: url,
-                        // Enhanced embed URL to prevent YouTube redirects
-                        embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?` + 
-                                  `rel=0&` +              // Don't show related videos
-                                  `modestbranding=1&` +   // Minimal YouTube branding
-                                  `fs=1&` +               // Allow fullscreen
-                                  `iv_load_policy=3&` +   // Hide video annotations
-                                  `controls=1&` +         // Show player controls
-                                  `disablekb=0&` +        // Keep keyboard controls
-                                  `playsinline=1&` +      // Play inline on mobile
-                                  `widget_referrer=${encodeURIComponent(window.location.href)}` // Set referrer
-                    });
-                    videoCount++;
-                }
+
+        return null;
+      }
+
+      function loadPredefinedVideos() {
+        YOUTUBE_URLS.forEach((url) => {
+          const videoId = extractVideoId(url);
+          if (videoId && !videos.some((v) => v.id === videoId)) {
+            videos.push({
+              id: videoId,
+              url: url,
+              // Enhanced embed URL to prevent YouTube redirects
+              embedUrl:
+                `https://www.youtube-nocookie.com/embed/${videoId}?` +
+                `rel=0&` + // Don't show related videos
+                `modestbranding=1&` + // Minimal YouTube branding
+                `fs=1&` + // Allow fullscreen
+                `iv_load_policy=3&` + // Hide video annotations
+                `controls=1&` + // Show player controls
+                `disablekb=0&` + // Keep keyboard controls
+                `playsinline=1&` + // Play inline on mobile
+                `widget_referrer=${encodeURIComponent(window.location.href)}`, // Set referrer
             });
-            renderVideos();
+            videoCount++;
+          }
+        });
+        renderVideos();
+      }
+
+      function removeVideo(videoId) {
+        const index = videos.findIndex((v) => v.id === videoId);
+        if (index > -1) {
+          videos.splice(index, 1);
+          videoCount--;
+          renderVideos();
         }
-        
-        function removeVideo(videoId) {
-            const index = videos.findIndex(v => v.id === videoId);
-            if (index > -1) {
-                videos.splice(index, 1);
-                videoCount--;
-                renderVideos();
-            }
-        }
-        
-        function renderVideos() {
-            const grid = document.getElementById('videoGrid');
-            
-            if (videoCount === 0) {
-                grid.innerHTML = `
+      }
+
+      function renderVideos() {
+        const grid = document.getElementById("videoGrid");
+
+        if (videoCount === 0) {
+          grid.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">📺</div>
                         <div class="empty-state-text">No videos configured</div>
                     </div>
                 `;
-                return;
-            }
-            
-            grid.innerHTML = videos.map(video => `
+          return;
+        }
+
+        grid.innerHTML = videos
+          .map(
+            (video) => `
                 <div class="video-card">
                     <div class="video-wrapper">
                         <iframe 
@@ -701,86 +391,101 @@
                         <button class="remove-btn" onclick="removeVideo('${video.id}')">Remove</button>
                     </div>
                 </div>
-            `).join('');
-        }
-        
-        // Load predefined videos on page load
-        window.addEventListener('DOMContentLoaded', loadPredefinedVideos);
-        
-        // ============================================
-        // BLOCK ALL EXTERNAL REDIRECTS
-        // ============================================
-        
-        // Prevent new window/tab openings
-        window.open = function() {
-            console.log('Blocked: External window opening attempt');
-            return null;
-        };
-        
-        // Intercept all clicks and block external navigation
-        document.addEventListener('click', function(e) {
-            let target = e.target;
-            
-            // Traverse up to find if clicked element is or contains a link
-            while (target && target !== document) {
-                if (target.tagName === 'A' || target.onclick) {
-                    const href = target.href || target.getAttribute('href');
-                    
-                    // Block external links
-                    if (href && (href.includes('youtube.com') || href.includes('youtu.be') || href.startsWith('http'))) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Blocked: External navigation attempt to', href);
-                        
-                        // Notification to user
-                        console.log('External links are disabled to keep you focused on studying! 📚');
-                        
-                        return false;
-                    }
-                }
-                target = target.parentNode;
-            }
-        }, true); // Use capture phase
-        
-        // Block beforeunload navigation attempts
-        let allowedNavigation = false;
-        window.addEventListener('beforeunload', function(e) {
-            if (!allowedNavigation) {
-                // This won't block iframe navigation but will warn on page navigation
+            `,
+          )
+          .join("");
+      }
+
+      // Load predefined videos on page load
+      window.addEventListener("DOMContentLoaded", loadPredefinedVideos);
+
+      // ============================================
+      // BLOCK ALL EXTERNAL REDIRECTS
+      // ============================================
+
+      // Prevent new window/tab openings
+      window.open = function () {
+        console.log("Blocked: External window opening attempt");
+        return null;
+      };
+
+      // Intercept all clicks and block external navigation
+      document.addEventListener(
+        "click",
+        function (e) {
+          let target = e.target;
+
+          // Traverse up to find if clicked element is or contains a link
+          while (target && target !== document) {
+            if (target.tagName === "A" || target.onclick) {
+              const href = target.href || target.getAttribute("href");
+
+              // Block external links
+              if (
+                href &&
+                (href.includes("youtube.com") ||
+                  href.includes("youtu.be") ||
+                  href.startsWith("http"))
+              ) {
                 e.preventDefault();
-                e.returnValue = '';
+                e.stopPropagation();
+                console.log("Blocked: External navigation attempt to", href);
+
+                // Notification to user
+                console.log(
+                  "External links are disabled to keep you focused on studying! 📚",
+                );
+
+                return false;
+              }
             }
+            target = target.parentNode;
+          }
+        },
+        true,
+      ); // Use capture phase
+
+      // Block beforeunload navigation attempts
+      let allowedNavigation = false;
+      window.addEventListener("beforeunload", function (e) {
+        if (!allowedNavigation) {
+          // This won't block iframe navigation but will warn on page navigation
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+
+      // Override location changes
+      const originalLocationSetter = Object.getOwnPropertyDescriptor(
+        window,
+        "location",
+      ).set;
+      Object.defineProperty(window, "location", {
+        set: function (value) {
+          console.log("Blocked: Location change attempt to", value);
+          // Don't allow the change
+          return;
+        },
+        get: function () {
+          return window.location;
+        },
+      });
+
+      // Block iframe navigation attempts
+      document.addEventListener("DOMContentLoaded", function () {
+        const iframes = document.querySelectorAll("iframe");
+        iframes.forEach((iframe) => {
+          try {
+            // Try to access iframe content (may be blocked by CORS)
+            iframe.sandbox =
+              "allow-scripts allow-same-origin allow-forms allow-presentation";
+          } catch (e) {
+            console.log("Cannot modify iframe sandbox due to CORS");
+          }
         });
-        
-        // Override location changes
-        const originalLocationSetter = Object.getOwnPropertyDescriptor(window, 'location').set;
-        Object.defineProperty(window, 'location', {
-            set: function(value) {
-                console.log('Blocked: Location change attempt to', value);
-                // Don't allow the change
-                return;
-            },
-            get: function() {
-                return window.location;
-            }
-        });
-        
-        // Block iframe navigation attempts
-        document.addEventListener('DOMContentLoaded', function() {
-            const iframes = document.querySelectorAll('iframe');
-            iframes.forEach(iframe => {
-                try {
-                    // Try to access iframe content (may be blocked by CORS)
-                    iframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-presentation';
-                } catch (e) {
-                    console.log('Cannot modify iframe sandbox due to CORS');
-                }
-            });
-        });
-        
-        console.log('🔒 External redirect protection enabled');
+      });
+
+      console.log("🔒 External redirect protection enabled");
     </script>
-</body>
-
+  </body>
 </html>
-
